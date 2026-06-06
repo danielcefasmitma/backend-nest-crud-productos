@@ -1,13 +1,17 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
 import { ProductoService } from "./producto.service";
+import { CreateProductoDto } from "./dto/create-producto.dto";
+import { ApiBearerAuth } from "@nestjs/swagger";
 
+@ApiBearerAuth()
 @Controller()
 export class ProductoController{
-    //Inyeccion de dependencia, del servide de producto.
+    //Inyeccion de dependencia, del service de producto.
     constructor(private readonly productoService: ProductoService){}
 
     @Post("/producto")
-    guardarProducto(@Body() datos: any){
+    //Aqui estamos usando el DTO
+    guardarProducto(@Body() datos: CreateProductoDto){
         return this.productoService.guardar(datos);
     }
     @Delete("/producto/:id")
@@ -16,7 +20,7 @@ export class ProductoController{
     }
 
     @Put("/producto/:id")
-    modificarProducto(@Param('id') id: string, @Body() datos: any){
+    modificarProducto(@Param('id') id: string, @Body() datos: CreateProductoDto){
         return this.productoService.modificar(+id, datos);
     }
 
