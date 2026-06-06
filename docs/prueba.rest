@@ -1,0 +1,31 @@
+### Listar Producto
+GET http://127.0.0.1:3000/producto
+
+### Mostrar Producto
+GET http://127.0.0.1:3000/producto/1
+ 
+### Guardar Producto
+POST http://127.0.0.1:3000/producto
+Content-Type: application/json
+
+{
+    "id": 4,
+    "nombre": "Krispichips",
+    "unidades": 12,
+    "precio": 54
+}
+
+### Eliminar Producto
+
+DELETE http://127.0.0.1:3000/producto/2
+
+
+### Modificar Producto
+
+PUT http://127.0.0.1:3000/producto/2
+Content-Type: application/json
+
+{
+    "nombre": "Bombombum Modificado",
+    "precio": 13
+}
