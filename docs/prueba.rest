@@ -9,10 +9,12 @@ POST http://127.0.0.1:3000/producto
 Content-Type: application/json
 
 {
-    "id": 4,
-    "nombre": "Krispichips",
-    "unidades": 12,
-    "precio": 54
+  "id": 2,
+  "nombre": "Prueba",
+  "unidades": 10,
+  "precio": "15",
+  "imagenUrl": "https://prueba.com/imagen.jpg",
+  "estado": true
 }
 
 ### Eliminar Producto

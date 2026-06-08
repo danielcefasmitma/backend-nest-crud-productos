@@ -1,5 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString, MaxLength, MinLength, minLength } from 'class-validator';
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength
+} from 'class-validator';
 
 export class CreateProductoDto {
   // Decorador de swagger para que las propiedades sean visibles.
@@ -13,8 +21,8 @@ export class CreateProductoDto {
   // Decoradores de class-validator
   @IsNotEmpty({ message: 'El nombre es requerido' })
   @IsString({ message: 'El nombre debe ser un string' })
-  @MinLength(3, {message: 'El nombre debe tener al menos 3 caracteres'})
-  @MaxLength(50, {message: 'El nombre debe tener maximo 50 caracteres'})
+  @MinLength(3, { message: 'El nombre debe tener al menos 3 caracteres' })
+  @MaxLength(50, { message: 'El nombre debe tener maximo 50 caracteres' })
   nombre!: string;
 
   @ApiProperty({
@@ -25,7 +33,10 @@ export class CreateProductoDto {
     required: true,
   })
   @IsNotEmpty({ message: 'Las unidades son requeridas' })
-  @IsNumber({ allowNaN: false, allowInfinity: false }, { message: 'Las unidades deben ser un numero' })
+  @IsNumber(
+    { allowNaN: false, allowInfinity: false },
+    { message: 'Las unidades deben ser un numero' },
+  )
   unidades?: number;
 
   @ApiProperty({
@@ -35,7 +46,28 @@ export class CreateProductoDto {
     maxLength: 50,
     required: true,
   })
-  @IsNotEmpty( { message: 'El precio es requerido' })
-  @IsNumber( { allowNaN: false, allowInfinity: false }, { message: 'El precio debe ser un numero' })
+  @IsNotEmpty({ message: 'El precio es requerido' })
+  @IsNumber(
+    { allowNaN: false, allowInfinity: false },
+    { message: 'El precio debe ser un numero' },
+  )
   precio?: number;
+
+  @ApiProperty({
+    description: 'URL de la imagen del producto',
+    example: 'https://example.com/imagen.jpg',
+    required: false,
+  })
+  @IsOptional()
+  @IsString({ message: 'La URL de la imagen debe ser un string' })
+  imagenUrl?: string;
+
+  @ApiProperty({
+    description: 'Estado del producto',
+    example: true,
+    required: false,
+  })
+  @IsBoolean({ message: 'El estado debe ser un booleano' })
+  @IsOptional()
+  estado?: boolean;
 }

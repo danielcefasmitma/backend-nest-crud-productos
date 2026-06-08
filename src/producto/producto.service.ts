@@ -1,62 +1,35 @@
 import { Injectable } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { Producto } from './entities/producto.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CreateProductoDto } from './dto/create-producto.dto';
+import { UpdateProductoDto } from './dto/update-producto.dto';
 
-@Injectable()
+@Injectable() // El decorador @Injectable() indica que esta clase puede ser inyectada como una dependencia en otros componentes de NestJS.
 export class ProductoService {
-  productos = [
-    {
-      id: 1,
-      nombre: 'Oreo',
-      precio: 52,
-    },
-
-    {
-      id: 2,
-      nombre: 'Bombombum',
-      precio: 35,
-    },
-
-    {
-      id: 3,
-      nombre: 'Pilfrut',
-      precio: 10,
-    },
-  ];
+  constructor(
+    @InjectRepository(Producto) // Inyecta el repositorio de Producto para interactuar con la base de datos
+    private readonly productoRepository: Repository<Producto>, // El repositorio de Producto se utiliza para realizar operaciones CRUD en la base de datos
+  ) {}
 
   listar() {
-    return this.productos;
+    return this.productoRepository.find();
   }
 
   mostrar(id: number) {
-    return this.productos.find((producto) => producto.id === id);
+    return this.productoRepository.findOneBy({id});
   }
 
-  guardar(datos: any) {
-    this.productos.push(datos);
-    return {
-      mensaje: 'Producto guardado.',
-      producto: datos
-    };
+  guardar(datos: CreateProductoDto) {
+    const producto = this.productoRepository.create(datos); // Crea una nueva instancia de Producto a partir del DTO
+    return this.productoRepository.save(producto); // Guarda el producto en la base de datos y devuelve el producto guardado
   }
 
   eliminar(id: number) {
-    const indice: number = this.productos.findIndex(
-      (producto) => producto.id === id,
-    );
-    if (indice !== -1) {
-      this.productos.splice(indice, 1);
-      return { mensaje: 'Producto eliminado', eliminado: id };
-    }
-    return { mensaje: 'No se encontro el producto', producto: id };
+    return this.productoRepository.delete(id); // Elimina el producto con el ID especificado de la base de datos
   }
 
-  modificar(id: number, datos: any) {
-    const producto = this.productos.find((producto) => producto.id === id);
-    if (!producto) {
-      return null;
-    }
-
-    Object.assign(producto, datos);
-
-    return producto;
+  modificar(id: number, datos: UpdateProductoDto) { 
+    return this.productoRepository.update(id, datos); // Actualiza el producto con el ID especificado con los nuevos datos proporcionados
   }
 }
